@@ -1,4 +1,4 @@
-import { Card, CardContent, Container, Divider, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Card, CardActionArea, CardActions, CardContent, Container, Divider, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import DataInput from './DataInput';
 import DataOutput from './DataOutput';
@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 function App() {
 
   const [kapitalertragssteuer, setKapitalertrtagssteuer] = useState(18.463)
-
   const [inflation, setInflation] = useState(2)
   const [mietteuerung, setMietteuerung] = useState(2)
   const [wersteigerung, setWertsteigerung] = useState(3)
@@ -37,81 +36,78 @@ function App() {
   const [vermoegen, setVermoegen] = useState(0)
   const [vermoegenNetto, setVermoegenNetto] = useState(0)
 
-  const [tilgungsplan, setTilgungsplan] = useState<number[]>([])
-
-
-  useEffect(() => {
-    setDarlehen(kaufpreis + modernKost + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital)
-  }, [eigenkapital, kaufpreis, modernKost, gest, notar, makler])
+  const [tilgungsplan, setTilgungsplan] = useState<tilgungsplanRow[]>([])
+  const [showTilgungsplan, setShowTilgungsplan] = useState(false)
 
   useEffect(() => {
-    setZinsenMonat(zinsenJahr / 100 / 12 * darlehen)
-  }, [zinsenJahr, darlehen])
+    const _totalAmnt = kaufpreis + modernKost
+    const _darlehen = _totalAmnt + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital
+    const _zinsenMonat = zinsenJahr / 100 / 12 * _darlehen
+    const _annuitaet = tilgung / 100 / 12 * _darlehen + _zinsenMonat;
+    let _rate = (zinsenJahr / 100 / 12)
+    const _den = -_darlehen * _rate + _annuitaet
+    const _abzahlenMonat = Math.log(_annuitaet / _den) / Math.log(1 + _rate);
+    const _abzahlenJahr = _abzahlenMonat / 12;
+    const _mietpreis = ((kaltmiete * (1 + mietteuerung / 100) ** _abzahlenJahr) + kaltmiete) / 2;
+    _rate = instand / 100 / 12
+    const _instandEuro = (((_totalAmnt * _rate) * (1 + inflation / 100) ** _abzahlenJahr) + _totalAmnt * _rate) / 2;
+    const _monatBelastung = annuitaet + instantEuro;
+    const _sparrate = _monatBelastung - _mietpreis;
+    const _pmt = -_sparrate * 12
+    _rate = rendite / 100
+    const _pow = (1 + _rate) ** _abzahlenJahr
+    const _vermoegen = (_pmt * (1 - _pow) / _rate) + eigenkapital * _pow;
+    const _vermoegenNetto = _vermoegen - ((_vermoegen - (_sparrate * 12 * _abzahlenJahr)) * kapitalertragssteuer / 100);
+    const _gesamtBelastung = _monatBelastung * 12 * _abzahlenJahr + eigenkapital;
+    const _wertImmobilie = _totalAmnt * (1 + wersteigerung / 100) ** _abzahlenJahr;
+    setDarlehen(_darlehen)
+    setZinsenMonat(_zinsenMonat)
+    setAnnuitaet(_annuitaet)
+    setAbzahlenMonat(_abzahlenMonat)
+    setAbzahlenJahr(_abzahlenJahr)
+    setMietpreis(_mietpreis)
+    setInstantEuro(_instandEuro)
+    setMonatBelastung(_monatBelastung)
+    setSparrate(_sparrate)
+    setVermoegen(_vermoegen)
+    setVermoegenNetto(_vermoegenNetto)
+    setGesamtBelastung(_gesamtBelastung)
+    setWertImmobilie(_wertImmobilie)
 
-  useEffect(() => {
-    setAnnuitaet(tilgung / 100 / 12 * darlehen + zinsenMonat)
-  }, [zinsenMonat, tilgung, darlehen])
+  }, [
+    inflation, mietteuerung, wersteigerung, rendite, eigenkapital, kaltmiete,
+    kaufpreis, modernKost, gest, notar, makler, zinsenJahr, tilgung, instand, kapitalertragssteuer
+  ])
 
-  useEffect(() => {
-    const rate = (zinsenJahr / 100 / 12)
-    const den = -darlehen * rate + annuitaet
-    setAbzahlenMonat(Math.log(annuitaet / den) / Math.log(1 + rate))
-  }, [zinsenJahr, annuitaet, darlehen])
+  interface tilgungsplanRow {
+    rate: number,
+    annuity: number,
+    zins: number,
+    tilgung: number,
+    rest: number
+  }
 
-  useEffect(() => {
-    setAbzahlenJahr(abzahlenMonat / 12)
-  }, [abzahlenMonat])
-
-  useEffect(() => {
-    setMietpreis(((kaltmiete * (1 + mietteuerung / 100) ** abzahlenJahr) + kaltmiete) / 2)
-  }, [mietteuerung, abzahlenJahr, kaltmiete])
-
-  useEffect(() => {
-    const totalAmnt = kaufpreis + modernKost
-    const rate = instand / 100 / 12
-    setInstantEuro((((totalAmnt * rate) * (1 + inflation / 100) ** abzahlenJahr) + totalAmnt * rate) / 2)
-  }, [kaufpreis, modernKost, instand, inflation, abzahlenJahr])
-
-  useEffect(() => {
-    setMonatBelastung(annuitaet + instantEuro)
-  }, [annuitaet, instantEuro])
-
-  useEffect(() => {
-    setSparrate(monatBelastung - mietpreis)
-  }, [monatBelastung, mietpreis])
-
-  useEffect(() => {
-    const pmt = -sparrate * 12
-    const rate = rendite / 100
-    const pow = (1 + rate) ** abzahlenJahr
-    setVermoegen((pmt * (1 - pow) / rate) + eigenkapital * pow)
-  }, [rendite, abzahlenJahr, eigenkapital, sparrate])
-
-  useEffect(() => {
-    setVermoegenNetto(vermoegen - ((vermoegen - (sparrate * 12 * abzahlenJahr)) * kapitalertragssteuer / 100))
-  }, [vermoegen, sparrate, abzahlenJahr, kapitalertragssteuer])
-
-  useEffect(() => {
-    setGesamtBelastung(monatBelastung * 12 * abzahlenJahr + eigenkapital)
-  }, [monatBelastung, abzahlenJahr, eigenkapital])
-
-  useEffect(() => {
-    setWertImmobilie((kaufpreis + modernKost) * (1 + wersteigerung / 100) ** abzahlenJahr)
-  }, [kaufpreis, modernKost, wersteigerung, abzahlenJahr])
-
-  useEffect(() => {
-    const plan = []
+  const createTilgungsplan = () => {
+    const plan: tilgungsplanRow[] = []
     let rest = darlehen
-    plan.push(rest)
-    for (let i = 1; i < abzahlenMonat; i++) {
-      const z = zinsenJahr / 100 / 12 * rest
-      const a = Math.min(annuitaet, rest + z)
-      const t = a - z
+    let z = zinsenJahr / 100 / 12 * rest
+    let a = Math.min(annuitaet, rest + z)
+    let t = a - z
+    for (let i = 0; i < abzahlenMonat; i++) {
+      z = zinsenJahr / 100 / 12 * rest
+      a = Math.min(annuitaet, rest + z)
+      t = a - z
       rest -= t
-      plan.push(rest)
+      plan.push({
+        rate: i,
+        annuity: a,
+        zins: z,
+        tilgung: t,
+        rest: rest
+      })
     }
     setTilgungsplan(plan)
-  }, [darlehen, abzahlenMonat, annuitaet])
+  }
 
 
   return (
@@ -250,7 +246,6 @@ function App() {
                 tooltip='Hier errechnet sich der Geldwert nach Verkauf der Investition (z.B. ETF) und Abzug der Kapitalertragssteuer. Es wurden 18,463 Kapitalertragssteuer angenommen. Das gilt aber nur für Aktien ETFs. Sonst 25%'
                 typeHint='€'
                 value={vermoegenNetto} />
-
               <DataOutput
                 label='Anfangskapital'
                 tooltip='Gleich dem Eigenkapital oben'
@@ -308,38 +303,45 @@ function App() {
           </CardContent>
         </Card>
       </Grid>
+      <Card>
+        <CardContent>
+          <Stack direction='row' sx={{ display: 'flex', alignContent: 'space-between' }}>
+            <Typography variant='h4' sx={{ flexGrow: 1 }}>Tilgung und Zinsplan</Typography>
+            <Button variant='outlined' size='small' onClick={() => {
+              createTilgungsplan()
+              setShowTilgungsplan(!showTilgungsplan)
+            }}>{showTilgungsplan ? 'ausblenden' : 'anzeigen'}</Button>
+          </Stack>
+          <Divider sx={{ marginBottom: 2 }}></Divider>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell >Rate</TableCell>
+                <TableCell>Annuität</TableCell>
+                <TableCell>Zins</TableCell>
+                <TableCell>Tilgung</TableCell>
+                <TableCell>Restschuld</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
 
-      <Typography variant='h4'>Tilgung und Zinsplan</Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Rate</TableCell>
-            <TableCell>Annuität</TableCell>
-            <TableCell>Zins</TableCell>
-            <TableCell>Tilgung</TableCell>
-            <TableCell>Restschuld</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+              {showTilgungsplan ?
+                tilgungsplan.map((v, i) => {
+                  return (
+                    <TableRow>
+                      <TableCell>{i + 1}</TableCell>
+                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.annuity)}</TableCell>
+                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.zins)}</TableCell>
+                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.tilgung)}</TableCell>
+                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.rest)}</TableCell>
+                    </TableRow>
 
-          {
-            tilgungsplan.map((v, i) => {
-              const z = zinsenJahr / 100 / 12 * v
-              const a = Math.min(annuitaet, v + z)
-              const t = a - z
-              return (
-                <TableRow>
-                  <TableCell>{i + 1}</TableCell>
-                  <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(a)}</TableCell>
-                  <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(z)}</TableCell>
-                  <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t)}</TableCell>
-                  <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v - t)}</TableCell>
-                </TableRow>
-
-              )
-            })}
-        </TableBody>
-      </Table>
+                  )
+                }) : <></>}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </Container >
   )
 }

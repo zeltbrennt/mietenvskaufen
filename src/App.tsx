@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import SliderInput from './SliderInput';
 import ResultOutput from './ResultOutput';
 import SwitchInput from './SwitchInput';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 function App() {
 
   const [kapitalertragssteuer, setKapitalertrtagssteuer] = useState(18.46)
@@ -144,7 +145,7 @@ function App() {
   return (
     <Container maxWidth='md'
       sx={{
-        bgcolor: 'lightslategray',
+        bgcolor: 'Window',
         borderRadius: '5px',
         paddingTop: 2,
         paddingBottom: 1,
@@ -153,7 +154,7 @@ function App() {
       }} >
       <Typography variant='h3' marginBottom={1} >Mieten vs. Kaufen</Typography>
       <Typography marginBottom={1}>
-        inspiriert durch <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/r/Finanzen/comments/1gjabd5/ich_pr%C3%A4sentiere_meinen_mieten_vs_kaufen_rechner/"} >diesen Post</Link> auf Reddit von <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/user/nothingtohidemic"}>/u/nothingtohidemic</Link>
+        Inspiriert durch <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/r/Finanzen/comments/1gjabd5/ich_pr%C3%A4sentiere_meinen_mieten_vs_kaufen_rechner/"} >diesen Post</Link> auf Reddit von <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/user/nothingtohidemic"}>/u/nothingtohidemic</Link>
       </Typography>
       <Typography marginBottom={2}>
         Es wird verglichen, inwieweit es sich lohnt weiter zur Miete zur Wohnen oder eine Immobilie zu kaufen. Dabei wird davon ausgegangen, dass die Differenz zum Mehraufwand bei Kauf investiert wird.
@@ -185,7 +186,7 @@ function App() {
               defaultValue={rendite}
               handleInput={setRendite} />
             <SwitchInput
-              label='Ausschießlich Aktien-ETF'
+              label='Ausschließlich Aktien-ETF'
               tooltip='Kapitalertragssteuer liegt bei 25%, bei Aktien-ETFs jedoch nur 18.46%'
               handleInput={setKapitalertrtagssteuer} />
           </Grid>
@@ -397,6 +398,12 @@ function App() {
           </Box>
         </CardContent>
       </Card>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 1 }}>
+
+        <Button variant='text' color="secondary" startIcon={<VolunteerActivismIcon />} onClick={() => window.open("https://paypal.me/zeltbrennt/5")}>
+          Buy me a coffee
+        </Button>
+      </Box>
     </Container >
   )
 }

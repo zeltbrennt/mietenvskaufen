@@ -358,7 +358,7 @@ function App() {
             </Grid>
             <Grid container size={4} justifyContent={'flex-end'}>
 
-              <Button variant='outlined' size='small' onClick={() => {
+              <Button variant='contained' size='small' onClick={() => {
                 createTilgungsplan()
                 setShowTilgungsplan(!showTilgungsplan)
               }}>{showTilgungsplan ? 'ausblenden' : 'anzeigen'}</Button>

@@ -36,7 +36,7 @@ export default function SwitchInput({ label, tooltip, handleInput }: DataInputPr
                 <Grid size={2} container justifyContent={'flex-end'}>
                     <Tooltip title={tooltip}>
                         <Icon>
-                            <HelpIcon color="primary" />
+                            <HelpIcon color="action" />
                         </Icon>
                     </Tooltip>
                 </Grid>

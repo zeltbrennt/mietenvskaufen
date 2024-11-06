@@ -19,7 +19,7 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
 
             <Grid container spacing={1} alignItems={'center'} >
-                <Grid size={10}>
+                <Grid size={{ md: 10, xs: 11 }}>
 
                     <TextField
                         onChange={(event) => {
@@ -35,10 +35,10 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
                             input: { endAdornment: <InputAdornment position="end">{typeHint}</InputAdornment> }
                         }} />
                 </Grid>
-                <Grid size={2} container justifyContent={'flex-end'}>
+                <Grid size={{ md: 2, xs: 1 }} container justifyContent={'flex-end'}>
                     <Tooltip title={tooltip}>
                         <Icon>
-                            <HelpIcon color="primary" />
+                            <HelpIcon color='action' />
                         </Icon>
                     </Tooltip>
                 </Grid>

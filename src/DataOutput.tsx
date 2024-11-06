@@ -27,7 +27,7 @@ export default function DataOutput({ label, tooltip, value, typeHint }: DataOutp
 
                             <Tooltip title={tooltip}>
                                 <Icon>
-                                    <HelpIcon color="primary" />
+                                    <HelpIcon color="action" />
                                 </Icon>
                             </Tooltip>
                         </Grid>

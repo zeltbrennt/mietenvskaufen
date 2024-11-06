@@ -22,7 +22,7 @@ export default function SliderInput({ label, tooltip, handleInput, defaultValue 
                 <Grid size={12}>
                     <Typography >{label}</Typography>
                 </Grid>
-                <Grid size={10}>
+                <Grid size={{ md: 10, xs: 11 }}>
                     <Slider
                         onChange={(_, newVal) => {
                             setState(Number(newVal))
@@ -32,19 +32,19 @@ export default function SliderInput({ label, tooltip, handleInput, defaultValue 
                         }}
                         value={state}
                         min={0}
-                        max={10}
+                        max={20}
                         step={0.1}
                         valueLabelDisplay="auto"
-                        valueLabelFormat={(value) => { return `${value}%` }}
+                        valueLabelFormat={(value) => { return `${Math.round(100 * value) / 100}%` }}
                         id={label}
                         sx={{ flexGrow: 1 }}
                     />
                 </Grid>
-                <Grid size={2} container justifyContent={'flex-end'}>
+                <Grid size={{ md: 2, xs: 1 }} container justifyContent={'flex-end'}>
 
                     <Tooltip title={tooltip}>
                         <Icon>
-                            <HelpIcon color="primary" />
+                            <HelpIcon color="action" />
                         </Icon>
                     </Tooltip>
                 </Grid>

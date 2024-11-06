@@ -28,7 +28,6 @@ export default function SwitchInput({ label, tooltip, handleInput }: DataInputPr
                                 onChange={(event) => {
                                     setChecked(event.target.checked)
                                     handleInput(event.target.checked ? 18.46 : 25)
-                                    console.log(event.target.checked ? 18.46 : 25)
                                 }} />}
                             label={label}
                             labelPlacement="end" />
@@ -37,7 +36,7 @@ export default function SwitchInput({ label, tooltip, handleInput }: DataInputPr
                 <Grid size={2} container justifyContent={'flex-end'}>
                     <Tooltip title={tooltip}>
                         <Icon>
-                            <HelpIcon />
+                            <HelpIcon color="primary" />
                         </Icon>
                     </Tooltip>
                 </Grid>

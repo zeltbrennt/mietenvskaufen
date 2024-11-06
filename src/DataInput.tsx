@@ -1,6 +1,7 @@
 import { TextField, Tooltip, Icon, InputAdornment } from "@mui/material"
 import Grid from "@mui/material/Grid2";
 import HelpIcon from '@mui/icons-material/Help';
+import { useState } from "react";
 
 interface DataInputProps {
     label: string,
@@ -11,6 +12,9 @@ interface DataInputProps {
 }
 
 export default function DataInput({ label, tooltip, handleInput, typeHint, defaultValue }: DataInputProps) {
+
+    const [state, setState] = useState(defaultValue)
+
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
 
@@ -20,8 +24,9 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
                     <TextField
                         onChange={(event) => {
                             handleInput(Number(event.target.value))
+                            setState(Number(event.target.value))
                         }}
-                        defaultValue={defaultValue}
+                        value={state}
                         label={label}
                         id={label}
                         required
@@ -33,7 +38,7 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
                 <Grid size={2} container justifyContent={'flex-end'}>
                     <Tooltip title={tooltip}>
                         <Icon>
-                            <HelpIcon />
+                            <HelpIcon color="primary" />
                         </Icon>
                     </Tooltip>
                 </Grid>

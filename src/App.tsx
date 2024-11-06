@@ -43,44 +43,72 @@ function App() {
   const [showTilgungsplan, setShowTilgungsplan] = useState(false)
 
   useEffect(() => {
-    const _totalAmnt = kaufpreis + modernKost
-    const _darlehen = _totalAmnt + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital
-    const _zinsenMonat = zinsenJahr / 100 / 12 * _darlehen
-    const _annuitaet = tilgung / 100 / 12 * _darlehen + _zinsenMonat;
-    let _rate = (zinsenJahr / 100 / 12)
-    const _den = -_darlehen * _rate + _annuitaet
-    const _abzahlenMonat = Math.log(_annuitaet / _den) / Math.log(1 + _rate);
-    const _abzahlenJahr = _abzahlenMonat / 12;
-    const _mietpreis = ((kaltmiete * (1 + mietteuerung / 100) ** _abzahlenJahr) + kaltmiete) / 2;
-    _rate = instand / 100 / 12
-    const _instandEuro = (((_totalAmnt * _rate) * (1 + inflation / 100) ** _abzahlenJahr) + _totalAmnt * _rate) / 2;
-    const _monatBelastung = annuitaet + instantEuro;
-    const _sparrate = _monatBelastung - _mietpreis;
-    const _pmt = -_sparrate * 12
-    _rate = rendite / 100
-    const _pow = (1 + _rate) ** _abzahlenJahr
-    const _vermoegen = (_pmt * (1 - _pow) / _rate) + eigenkapital * _pow;
-    const _vermoegenNetto = _vermoegen - ((_vermoegen - (_sparrate * 12 * _abzahlenJahr)) * kapitalertragssteuer / 100);
-    const _gesamtBelastung = _monatBelastung * 12 * _abzahlenJahr + eigenkapital;
-    const _wertImmobilie = _totalAmnt * (1 + wersteigerung / 100) ** _abzahlenJahr;
-    setDarlehen(_darlehen)
-    setZinsenMonat(_zinsenMonat)
-    setAnnuitaet(_annuitaet)
-    setAbzahlenMonat(_abzahlenMonat)
-    setAbzahlenJahr(_abzahlenJahr)
-    setMietpreis(_mietpreis)
-    setInstantEuro(_instandEuro)
-    setMonatBelastung(_monatBelastung)
-    setSparrate(_sparrate)
-    setVermoegen(_vermoegen)
-    setVermoegenNetto(_vermoegenNetto)
-    setGesamtBelastung(_gesamtBelastung)
-    setWertImmobilie(_wertImmobilie)
+    setDarlehen(kaufpreis + modernKost + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital)
 
-  }, [
-    inflation, mietteuerung, wersteigerung, rendite, eigenkapital, kaltmiete,
-    kaufpreis, modernKost, gest, notar, makler, zinsenJahr, tilgung, instand, kapitalertragssteuer
-  ])
+  }, [kaufpreis, modernKost, gest, notar, makler, eigenkapital])
+
+  useEffect(() => {
+    setZinsenMonat(zinsenJahr / 100 / 12 * darlehen)
+
+  }, [darlehen, zinsenJahr])
+
+  useEffect(() => {
+    setAnnuitaet(tilgung / 100 / 12 * darlehen + zinsenMonat)
+
+  }, [tilgung, zinsenMonat, darlehen])
+
+  useEffect(() => {
+    const _rate = (zinsenJahr / 100 / 12)
+    const _den = -darlehen * _rate + annuitaet
+    const _abzahlenMonat = Math.log(annuitaet / _den) / Math.log(1 + _rate);
+    setAbzahlenMonat(_abzahlenMonat)
+
+  }, [annuitaet, zinsenJahr, darlehen])
+
+  useEffect(() => {
+    setAbzahlenJahr(abzahlenMonat / 12)
+  }, [abzahlenMonat])
+
+  useEffect(() => {
+    setMietpreis(((kaltmiete * (1 + mietteuerung / 100) ** abzahlenJahr) + kaltmiete) / 2)
+  }, [kaltmiete, mietteuerung, abzahlenJahr])
+
+  useEffect(() => {
+    const _totalAmnt = kaufpreis + modernKost
+    const _rate = instand / 100 / 12
+    setInstantEuro((((_totalAmnt * _rate) * (1 + inflation / 100) ** abzahlenJahr) + _totalAmnt * _rate) / 2)
+  }, [inflation, kaufpreis, modernKost, abzahlenJahr, instand])
+
+  useEffect(() => {
+    setMonatBelastung(annuitaet + instantEuro)
+  }, [annuitaet, instantEuro])
+
+  useEffect(() => {
+    setSparrate(monatBelastung - mietpreis)
+  }, [monatBelastung, mietpreis])
+
+  useEffect(() => {
+    const _rate = rendite / 100
+    const _pow = (1 + _rate) ** abzahlenJahr
+    const _pmt = -sparrate * 12
+    const _vermoegen = (_pmt * (1 - _pow) / _rate) + eigenkapital * _pow;
+    setVermoegen(_vermoegen)
+  }, [rendite, abzahlenJahr, eigenkapital, sparrate])
+
+  useEffect(() => {
+    setVermoegenNetto(vermoegen - ((vermoegen - (sparrate * 12 * abzahlenJahr)) * kapitalertragssteuer / 100))
+  }, [vermoegen, sparrate, abzahlenJahr, kapitalertragssteuer])
+
+  useEffect(() => {
+    setGesamtBelastung(monatBelastung * 12 * abzahlenJahr + eigenkapital)
+  }, [monatBelastung, abzahlenJahr, eigenkapital])
+
+  useEffect(() => {
+    setWertImmobilie((kaufpreis + modernKost) * (1 + wersteigerung / 100) ** abzahlenJahr)
+  }, [kaufpreis, modernKost, wersteigerung, abzahlenJahr])
+
+
+
 
   interface tilgungsplanRow {
     rate: number,

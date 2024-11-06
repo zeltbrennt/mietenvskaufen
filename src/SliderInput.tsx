@@ -1,4 +1,4 @@
-import { TextField, Tooltip, Icon, InputAdornment } from "@mui/material"
+import { Slider, Tooltip, Icon, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2";
 import HelpIcon from '@mui/icons-material/Help';
 
@@ -10,27 +10,31 @@ interface DataInputProps {
     defaultValue?: number
 }
 
-export default function DataInput({ label, tooltip, handleInput, typeHint, defaultValue }: DataInputProps) {
+export default function SliderInput({ label, tooltip, handleInput, defaultValue }: DataInputProps) {
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
 
             <Grid container spacing={1} alignItems={'center'} >
+                <Grid size={12}>
+                    <Typography >{label}</Typography>
+                </Grid>
                 <Grid size={10}>
-
-                    <TextField
-                        onChange={(event) => {
-                            handleInput(Number(event.target.value))
+                    <Slider
+                        onChange={(_, newVal) => {
+                            handleInput(Number(newVal))
                         }}
                         defaultValue={defaultValue}
-                        label={label}
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value) => { return `${value}%` }}
                         id={label}
-                        required
-                        fullWidth
-                        slotProps={{
-                            input: { endAdornment: <InputAdornment position="end">{typeHint}</InputAdornment> }
-                        }} />
+                        sx={{ flexGrow: 1 }}
+                    />
                 </Grid>
                 <Grid size={2} container justifyContent={'flex-end'}>
+
                     <Tooltip title={tooltip}>
                         <Icon>
                             <HelpIcon />
@@ -38,6 +42,6 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
                     </Tooltip>
                 </Grid>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }

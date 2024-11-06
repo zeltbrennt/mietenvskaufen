@@ -1,11 +1,14 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, Container, Divider, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Link, Button, Card, CardContent, Container, Divider, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import DataInput from './DataInput';
 import DataOutput from './DataOutput';
 import { useEffect, useState } from 'react';
+import SliderInput from './SliderInput';
+import ResultOutput from './ResultOutput';
+import SwitchInput from './SwitchInput';
 function App() {
 
-  const [kapitalertragssteuer, setKapitalertrtagssteuer] = useState(18.463)
+  const [kapitalertragssteuer, setKapitalertrtagssteuer] = useState(18.46)
   const [inflation, setInflation] = useState(2)
   const [mietteuerung, setMietteuerung] = useState(2)
   const [wersteigerung, setWertsteigerung] = useState(3)
@@ -111,63 +114,73 @@ function App() {
 
 
   return (
-    <Container maxWidth='md'>
-      <Typography variant='h3' marginBottom={2}>Mieten vs. Kaufen</Typography>
-      <Card sx={{ marginBottom: 5 }}>
+    <Container maxWidth='md'
+      sx={{
+        bgcolor: 'lightslategray',
+        borderRadius: '5px',
+        paddingTop: 2,
+        paddingBottom: 1,
+        marginLeft: { xs: 0, md: 'auto' },
+        marginRight: { xs: 0, md: 'auto' }
+      }} >
+      <Typography variant='h3' marginBottom={1} >Mieten vs. Kaufen</Typography>
+      <Typography marginBottom={1}>
+        inspiriert durch <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/r/Finanzen/comments/1gjabd5/ich_pr%C3%A4sentiere_meinen_mieten_vs_kaufen_rechner/"} >diesen Post</Link> auf Reddit von <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/user/nothingtohidemic"}>/u/nothingtohidemic</Link>
+      </Typography>
+      <Typography marginBottom={2}>
+        Es wird verglichen, inwieweit es sich lohnt weiter zur Miete zur Wohnen oder eine Immobilie zu kaufen. Dabei wird davon ausgegangen, dass die Differenz zum Mehraufwand bei Kauf investiert wird.
+      </Typography>
+      <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
         <CardContent>
           <Typography variant='h4'>Annahmen</Typography>
           <Divider sx={{ marginBottom: 2 }}></Divider>
-          <Grid container spacing={1.5}>
-            <DataInput
+          <Grid container spacing={1.5} alignItems={"flex-end"}>
+            <SliderInput
               label='Inflation'
               tooltip='Bitte angenommene Inflation pro Jahr eintragen'
-              typeHint='%'
               defaultValue={inflation}
-              handleInput={setInflation} />
-            <DataInput
+              handleInput={setInflation}
+            />
+            <SliderInput
               label='Mietteuerungsrate'
               tooltip='Bitte angenommene Mieterhöhung pro Jahr eintragen'
-              typeHint='%'
               defaultValue={mietteuerung}
               handleInput={setMietteuerung} />
-            <DataInput
+            <SliderInput
               label='Durchschnittliche Wertsteigerung Immobilie pro Jahr'
               tooltip='Bitte angenommene Wertsteigerung der Immobilie pro Jahr eintragen'
-              typeHint='%'
               defaultValue={wersteigerung}
               handleInput={setWertsteigerung} />
-            <DataInput
+            <SliderInput
               label='Durchschnittliche Rendite Invest pro Jahr'
               tooltip='Bitte angenommene Rendite für Investitionen pro Jahr eintragen'
-              typeHint='%'
               defaultValue={rendite}
               handleInput={setRendite} />
-            <DataInput
-              label='Kapitalertragssteuer'
-              tooltip='Bitte Kapitalertragssteuer eintragen. 18.463 % gilt nur für Aktien-ETFs, sonst 25 %'
-              typeHint='%'
-              defaultValue={kapitalertragssteuer}
+            <SwitchInput
+              label='Ausschießlich Aktien-ETF'
+              tooltip='Kapitalertragssteuer liegt bei 25%, bei Aktien-ETFs jedoch nur 18.46%'
               handleInput={setKapitalertrtagssteuer} />
           </Grid>
         </CardContent>
       </Card>
-      <Card sx={{ marginBottom: 5 }}>
+      <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
         <CardContent>
           <Typography variant='h4'>Eckdaten</Typography>
           <Divider sx={{ marginBottom: 2 }}></Divider>
-          <Grid container spacing={1.5}>
-            <DataInput
-              label='Eigenkapital'
-              tooltip='Bitte jetzt verfügbares Eigenkapital eintragen'
-              typeHint='€'
-              defaultValue={eigenkapital}
-              handleInput={setEigenkapital} />
+          <Grid container spacing={1.5} alignItems={"flex-end"}>
             <DataInput
               label='Mietpreis kalt (heute)'
               tooltip='Bitte hier die Kaltmiete eintragen'
               typeHint='€'
               defaultValue={kaltmiete}
               handleInput={setKaltmiete} />
+            <DataInput
+              label='Eigenkapital'
+              tooltip='Bitte jetzt verfügbares Eigenkapital eintragen'
+              typeHint='€'
+              defaultValue={eigenkapital}
+              handleInput={setEigenkapital} />
+
             <DataInput
               label='Kaufpreis Immobilie'
               tooltip='Bitte hier den Kaufpreis der Immobilie eintragen'
@@ -180,37 +193,37 @@ function App() {
               typeHint='€'
               defaultValue={modernKost}
               handleInput={setModernKost} />
-            <DataInput
+            <SliderInput
               label='Grunderwerbssteuer'
               tooltip='Bitte hier Grunderwerbssteuersatz eingeben'
               typeHint='%'
               defaultValue={gest}
               handleInput={setGest} />
-            <DataInput
+            <SliderInput
               label='Notar + Grundbuch'
               tooltip='Bitte hier Notar + Grundbuchsatz eingeben'
               typeHint='%'
               defaultValue={notar}
               handleInput={setNotar} />
-            <DataInput
+            <SliderInput
               label='Makler'
               tooltip='Bitte hier eventuelle Maklergebühren eingeben'
               typeHint='%'
               defaultValue={makler}
               handleInput={setMakler} />
-            <DataInput
+            <SliderInput
               label='Zinsen (pro Jahr)'
               tooltip='Bitte hier den Zinssatz (pro Jahr) eingeben'
               typeHint='%'
               defaultValue={zinsenJahr}
               handleInput={setZinsenJahr} />
-            <DataInput
+            <SliderInput
               label='Tilgung'
               tooltip='Bitte hier die anfängliche Tilgung eingeben'
               typeHint='%'
               defaultValue={tilgung}
               handleInput={setTilgung} />
-            <DataInput
+            <SliderInput
               label='Instandhaltungsquote'
               tooltip='Bitte hier die geschätzte Instandhaltungsquote eingeben'
               typeHint='%'
@@ -219,12 +232,16 @@ function App() {
           </Grid>
         </CardContent>
       </Card>
+      <Grid>
+        <ResultOutput savings={vermoegenNetto - wertImmobilie} time={Math.ceil(abzahlenJahr)} />
+
+      </Grid>
       <Grid size={{ md: 6 }}>
-        <Card sx={{ marginBottom: 5 }}>
+        <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
           <CardContent>
-            <Typography variant='h4'>Ergebnisse</Typography>
+            <Typography variant='h4'>Mieten</Typography>
             <Divider sx={{ marginBottom: 2 }}></Divider>
-            <Grid container spacing={1.5}>
+            <Grid container spacing={1.5} alignItems={"flex-end"}>
 
               <DataOutput
                 label='Mietpreis durchschnitt Laufzeit (inkl. Inflation)'
@@ -246,11 +263,17 @@ function App() {
                 tooltip='Hier errechnet sich der Geldwert nach Verkauf der Investition (z.B. ETF) und Abzug der Kapitalertragssteuer. Es wurden 18,463 Kapitalertragssteuer angenommen. Das gilt aber nur für Aktien ETFs. Sonst 25%'
                 typeHint='€'
                 value={vermoegenNetto} />
-              <DataOutput
-                label='Anfangskapital'
-                tooltip='Gleich dem Eigenkapital oben'
-                value={eigenkapital}
-                typeHint='€' />
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid size={{ md: 6 }}>
+        <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
+          <CardContent>
+            <Typography variant='h4'>Kaufen</Typography>
+            <Divider sx={{ marginBottom: 2 }}></Divider>
+            <Grid container spacing={1.5} alignItems={"flex-end"}>
+
               <DataOutput
                 label='Darlehen von der Bank insgesamt'
                 tooltip='Hier errechnet sich der gesamte Darlehensbetrag'
@@ -294,52 +317,56 @@ function App() {
                 tooltip='Hier errechnet sich der Wert der Immobilie am Ende der Laufzeit '
                 typeHint='€'
                 value={wertImmobilie} />
-              <DataOutput
-                label='Wenn man mietet, hat man so viel mehr'
-                tooltip='Hier errechnet sich ob Mieten oder Kaufen zu mehr Vermögen führt.Positiver Wert: Mieten ist besserNegativer Wert: Kaufen ist besser'
-                typeHint='€'
-                value={vermoegenNetto - wertImmobilie} />
             </Grid>
           </CardContent>
         </Card>
       </Grid>
-      <Card>
+      <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
         <CardContent>
-          <Stack direction='row' sx={{ display: 'flex', alignContent: 'space-between' }}>
-            <Typography variant='h4' sx={{ flexGrow: 1 }}>Tilgung und Zinsplan</Typography>
-            <Button variant='outlined' size='small' onClick={() => {
-              createTilgungsplan()
-              setShowTilgungsplan(!showTilgungsplan)
-            }}>{showTilgungsplan ? 'ausblenden' : 'anzeigen'}</Button>
-          </Stack>
+          <Grid container alignItems={'center'}>
+            <Grid size={8}>
+
+              <Typography variant='h4' sx={{ flexGrow: 1 }}>Tilgung und Zinsplan</Typography>
+            </Grid>
+            <Grid container size={4} justifyContent={'flex-end'}>
+
+              <Button variant='outlined' size='small' onClick={() => {
+                createTilgungsplan()
+                setShowTilgungsplan(!showTilgungsplan)
+              }}>{showTilgungsplan ? 'ausblenden' : 'anzeigen'}</Button>
+            </Grid>
+          </Grid>
           <Divider sx={{ marginBottom: 2 }}></Divider>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell >Rate</TableCell>
-                <TableCell>Annuität</TableCell>
-                <TableCell>Zins</TableCell>
-                <TableCell>Tilgung</TableCell>
-                <TableCell>Restschuld</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+          <Box sx={{ overflowX: 'auto' }}>
 
-              {showTilgungsplan ?
-                tilgungsplan.map((v, i) => {
-                  return (
-                    <TableRow>
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.annuity)}</TableCell>
-                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.zins)}</TableCell>
-                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.tilgung)}</TableCell>
-                      <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.rest)}</TableCell>
-                    </TableRow>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell >Rate</TableCell>
+                  <TableCell>Annuität</TableCell>
+                  <TableCell>Zins</TableCell>
+                  <TableCell>Tilgung</TableCell>
+                  <TableCell>Restschuld</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
 
-                  )
-                }) : <></>}
-            </TableBody>
-          </Table>
+                {showTilgungsplan ?
+                  tilgungsplan.map((v, i) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{i + 1}</TableCell>
+                        <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.annuity)}</TableCell>
+                        <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.zins)}</TableCell>
+                        <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.tilgung)}</TableCell>
+                        <TableCell>{Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v.rest)}</TableCell>
+                      </TableRow>
+
+                    )
+                  }) : <></>}
+              </TableBody>
+            </Table>
+          </Box>
         </CardContent>
       </Card>
     </Container >

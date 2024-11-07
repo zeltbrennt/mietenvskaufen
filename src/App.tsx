@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import SliderInput from './SliderInput';
 import ResultOutput from './ResultOutput';
 import SwitchInput from './SwitchInput';
+import DonateDialog from './DonateDialog';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
   const [tilgungsplan, setTilgungsplan] = useState<tilgungsplanRow[]>([])
   const [showTilgungsplan, setShowTilgungsplan] = useState(false)
   const [sparManuell, setSparManuell] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     setDarlehen(kaufpreis + modernKost + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital)
@@ -195,9 +197,9 @@ function App() {
               handleInput={setRendite} />
             <SwitchInput
               label='Ausschließlich Aktien-ETF'
-              tooltip='Kapitalertragssteuer liegt bei 25%, bei Aktien-ETFs jedoch nur 18.463%'
+              tooltip='Kapitalertragssteuer liegt bei 26.375%, bei Aktien-ETFs jedoch nur 18.463%'
               onValue={18.463}
-              offValue={25}
+              offValue={26.375}
               defaultState={true}
               handleInput={setKapitalertrtagssteuer} />
           </Grid>
@@ -424,10 +426,13 @@ function App() {
       </Card>
       <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: 1 }}>
 
-        <Button variant='text' color="secondary" startIcon={<VolunteerActivismIcon />} onClick={() => window.open("https://paypal.me/zeltbrennt/5")}>
+        <Button variant='text' color="secondary" startIcon={<VolunteerActivismIcon />} onClick={() => setOpen(true)}>
           Buy me a coffee
         </Button>
       </Box>
+
+      <DonateDialog open={open} onClose={() => { setOpen(false) }} />
+
     </Container >
   )
 }

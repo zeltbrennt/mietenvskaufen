@@ -35,7 +35,7 @@ export default function SwitchInput({ label, tooltip, handleInput, onValue, offV
                     </FormGroup>
                 </Grid>
                 <Grid size={2} container justifyContent={'flex-end'}>
-                    <Tooltip title={tooltip}>
+                    <Tooltip title={tooltip} enterTouchDelay={0} leaveTouchDelay={3000}>
                         <Icon>
                             <HelpIcon color="action" />
                         </Icon>

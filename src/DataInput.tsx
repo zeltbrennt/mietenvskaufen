@@ -2,6 +2,7 @@ import { TextField, Tooltip, Icon, InputAdornment } from "@mui/material"
 import Grid from "@mui/material/Grid2";
 import HelpIcon from '@mui/icons-material/Help';
 import { useState } from "react";
+import { parseNumber, formatNumber } from "./util";
 
 interface DataInputProps {
     label: string,
@@ -14,15 +15,6 @@ interface DataInputProps {
 export default function DataInput({ label, tooltip, handleInput, typeHint, defaultValue }: DataInputProps) {
 
     const [state, setState] = useState(defaultValue)
-
-    const formatNumber = (value: number) => {
-        return new Intl.NumberFormat('de-DE').format(value)
-    }
-
-    const parseNumber = (formattedValue: string) => {
-        const numericValue = formattedValue.replace(/[^0-9,-]+/g, '').replace(',', '.');
-        return numericValue ? parseFloat(numericValue) : 0;
-    };
 
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
@@ -46,7 +38,7 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
                         }} />
                 </Grid>
                 <Grid size={{ md: 2, xs: 1 }} container justifyContent={'flex-end'}>
-                    <Tooltip title={tooltip}>
+                    <Tooltip title={tooltip} enterTouchDelay={0} leaveTouchDelay={3000}>
                         <Icon>
                             <HelpIcon color='action' />
                         </Icon>

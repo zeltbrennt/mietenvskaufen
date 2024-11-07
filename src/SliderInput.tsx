@@ -15,14 +15,21 @@ export default function SliderInput({ label, tooltip, handleInput, defaultValue 
 
     const [state, setState] = useState(defaultValue)
 
+    const formatPercent = (n: number | undefined) => {
+        return n ? Intl.NumberFormat('de-DE', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(n / 100) : '0.0%'
+    }
+
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
 
             <Grid container spacing={1} alignItems={'center'} >
                 <Grid size={12}>
-                    <Typography >{label}</Typography>
+                    <Typography variant="caption">{label}</Typography>
                 </Grid>
-                <Grid size={{ md: 10, xs: 11 }}>
+                <Grid size={3}>
+                    <Typography>{formatPercent(state)}</Typography>
+                </Grid>
+                <Grid size={{ md: 7, xs: 8 }}>
                     <Slider
                         onChange={(_, newVal) => {
                             setState(Number(newVal))
@@ -34,15 +41,14 @@ export default function SliderInput({ label, tooltip, handleInput, defaultValue 
                         min={0}
                         max={20}
                         step={0.1}
-                        valueLabelDisplay="auto"
-                        valueLabelFormat={(value) => { return `${Math.round(100 * value) / 100}%` }}
+                        valueLabelDisplay="off"
                         id={label}
                         sx={{ flexGrow: 1 }}
-                    />
+                    ><span>{state}</span></Slider>
                 </Grid>
                 <Grid size={{ md: 2, xs: 1 }} container justifyContent={'flex-end'}>
 
-                    <Tooltip title={tooltip}>
+                    <Tooltip title={tooltip} enterTouchDelay={0} leaveTouchDelay={3000}>
                         <Icon>
                             <HelpIcon color="action" />
                         </Icon>

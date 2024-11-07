@@ -115,6 +115,11 @@ function App() {
     }
   }, [sparManuell])
 
+  useEffect(() => {
+    setShowTilgungsplan(false)
+  }, [inflation, mietteuerung, wersteigerung, rendite, kapitalertragssteuer, mietpreis, eigenkapital, kaufpreis, modernKost,
+    gest, notar, makler, zinsenJahr, tilgung, instand, sparManuell])
+
 
 
   interface tilgungsplanRow {

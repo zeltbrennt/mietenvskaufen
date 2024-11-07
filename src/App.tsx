@@ -42,6 +42,7 @@ function App() {
 
   const [tilgungsplan, setTilgungsplan] = useState<tilgungsplanRow[]>([])
   const [showTilgungsplan, setShowTilgungsplan] = useState(false)
+  const [sparManuell, setSparManuell] = useState(false)
 
   useEffect(() => {
     setDarlehen(kaufpreis + modernKost + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital)
@@ -108,6 +109,11 @@ function App() {
     setWertImmobilie((kaufpreis + modernKost) * (1 + wersteigerung / 100) ** abzahlenJahr)
   }, [kaufpreis, modernKost, wersteigerung, abzahlenJahr])
 
+  useEffect(() => {
+    if (!sparManuell) {
+      setSparrate(monatBelastung - mietpreis)
+    }
+  }, [sparManuell])
 
 
 
@@ -156,9 +162,6 @@ function App() {
       <Typography marginBottom={1}>
         Inspiriert durch <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/r/Finanzen/comments/1gjabd5/ich_pr%C3%A4sentiere_meinen_mieten_vs_kaufen_rechner/"} >diesen Post</Link> auf Reddit von <Link sx={{ color: 'lightskyblue' }} href={"https://www.reddit.com/user/nothingtohidemic"}>/u/nothingtohidemic</Link>
       </Typography>
-      <Typography marginBottom={2}>
-        Es wird verglichen, inwieweit es sich lohnt weiter zur Miete zur Wohnen oder eine Immobilie zu kaufen. Dabei wird davon ausgegangen, dass die Differenz zum Mehraufwand bei Kauf investiert wird.
-      </Typography>
       <Card sx={{ marginBottom: 5, bgcolor: 'whitesmoke' }}>
         <CardContent>
           <Typography variant='h4'>Annahmen</Typography>
@@ -187,7 +190,10 @@ function App() {
               handleInput={setRendite} />
             <SwitchInput
               label='Ausschließlich Aktien-ETF'
-              tooltip='Kapitalertragssteuer liegt bei 25%, bei Aktien-ETFs jedoch nur 18.46%'
+              tooltip='Kapitalertragssteuer liegt bei 25%, bei Aktien-ETFs jedoch nur 18.463%'
+              onValue={18.463}
+              offValue={25}
+              defaultState={true}
               handleInput={setKapitalertrtagssteuer} />
           </Grid>
         </CardContent>
@@ -258,6 +264,19 @@ function App() {
               typeHint='%'
               defaultValue={instand}
               handleInput={setInstand} />
+            <SwitchInput
+              label='Sparrate manuell festlegen'
+              tooltip='Standardmäßig wird die Differenz der Mehrkosten von Mietpreis zu monatlicher Belastung bei Kauf mit der erwarteten Rendite investiert.'
+              onValue={true}
+              offValue={false}
+              defaultState={false}
+              handleInput={setSparManuell} />
+            {sparManuell ? <DataInput
+              label='Sparrate (manuell)'
+              tooltip='Bitte die Sparrate bei Miete eintragen'
+              defaultValue={Math.round(sparrate)}
+              handleInput={setSparrate}
+              typeHint='€' /> : <></>}
           </Grid>
         </CardContent>
       </Card>

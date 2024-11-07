@@ -15,6 +15,15 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
 
     const [state, setState] = useState(defaultValue)
 
+    const formatNumber = (value: number) => {
+        return new Intl.NumberFormat('de-DE').format(value)
+    }
+
+    const parseNumber = (formattedValue: string) => {
+        const numericValue = formattedValue.replace(/[^0-9,-]+/g, '').replace(',', '.');
+        return numericValue ? parseFloat(numericValue) : 0;
+    };
+
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
 
@@ -23,10 +32,11 @@ export default function DataInput({ label, tooltip, handleInput, typeHint, defau
 
                     <TextField
                         onChange={(event) => {
-                            handleInput(Number(event.target.value))
-                            setState(Number(event.target.value))
+                            const numericValue = parseNumber(event.target.value)
+                            handleInput(numericValue)
+                            setState(numericValue)
                         }}
-                        value={state}
+                        value={state !== undefined ? formatNumber(state) : ''}
                         label={label}
                         id={label}
                         required

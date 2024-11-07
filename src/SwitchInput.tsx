@@ -6,14 +6,15 @@ import { useState } from "react";
 interface DataInputProps {
     label: string,
     tooltip: string,
-    handleInput: (a: number) => void,
-    typeHint?: string,
-    defaultValue?: number
+    handleInput: (a: any) => void,
+    defaultState: boolean,
+    onValue?: any,
+    offValue?: any
 }
 
-export default function SwitchInput({ label, tooltip, handleInput }: DataInputProps) {
+export default function SwitchInput({ label, tooltip, handleInput, onValue, offValue, defaultState }: DataInputProps) {
 
-    const [checked, setChecked] = useState(true)
+    const [checked, setChecked] = useState(defaultState)
 
     return (
         <Grid size={{ md: 4, sm: 6, xs: 12 }}>
@@ -27,7 +28,7 @@ export default function SwitchInput({ label, tooltip, handleInput }: DataInputPr
                                 checked={checked}
                                 onChange={(event) => {
                                     setChecked(event.target.checked)
-                                    handleInput(event.target.checked ? 18.46 : 25)
+                                    handleInput(event.target.checked ? onValue : offValue)
                                 }} />}
                             label={label}
                             labelPlacement="end" />

@@ -20,7 +20,7 @@ export default function DataOutput({ label, tooltip, value, typeHint }: DataOutp
                         </Grid>
                         <Grid size={10}>
                             <Typography variant="button">
-                                {typeHint === '€' ? Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value) : Math.ceil(value)}
+                                {value === Infinity ? 'Unendlich' : typeHint === '€' ? Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value) : Math.ceil(value)}
                             </Typography>
                         </Grid>
                         <Grid size={2} container justifyContent={'flex-end'}>

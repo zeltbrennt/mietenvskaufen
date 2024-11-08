@@ -144,23 +144,23 @@ function App() {
           <Grid container spacing={1.5} alignItems={"flex-end"}>
             <SliderInput
               label='Inflation'
-              tooltip='Bitte angenommene Inflation pro Jahr eintragen'
+              tooltip='Bitte angenommene durchschnittliche Inflation eintragen'
               defaultValue={inflation}
               handleInput={setInflation}
             />
             <SliderInput
               label='Mietteuerungsrate'
-              tooltip='Bitte angenommene Mieterhöhung pro Jahr eintragen'
+              tooltip='Bitte angenommene durchschnittliche Mieterhöhung (kalt) pro Jahr eintragen'
               defaultValue={mietteuerung}
               handleInput={setMietteuerung} />
             <SliderInput
-              label='Durchschnittliche Wertsteigerung Immobilie pro Jahr'
-              tooltip='Bitte angenommene Wertsteigerung der Immobilie pro Jahr eintragen'
+              label='Durchschnittliche Wertsteigerung Immobilie'
+              tooltip='Bitte angenommene durchschnittliche Wertsteigerung der Immobilie pro Jahr eintragen'
               defaultValue={wersteigerung}
               handleInput={setWertsteigerung} />
             <SliderInput
-              label='Durchschnittliche Rendite Invest pro Jahr'
-              tooltip='Bitte angenommene Rendite für Investitionen pro Jahr eintragen'
+              label='Durchschnittliche Rendite Invest'
+              tooltip='Bitte angenommene durchschnittliche Rendite für Investitionen pro Jahr eintragen'
               defaultValue={rendite}
               handleInput={setRendite} />
             <SwitchInput
@@ -210,8 +210,8 @@ function App() {
               defaultValue={gest}
               handleInput={setGest} />
             <SliderInput
-              label='Notar + Grundbuch'
-              tooltip='Bitte hier Notar + Grundbuchsatz eingeben'
+              label='Notar & Grundbuch'
+              tooltip='Bitte hier Kosten für Notar und Grundbuchsatz eingeben'
               typeHint='%'
               defaultValue={notar}
               handleInput={setNotar} />
@@ -223,13 +223,13 @@ function App() {
               handleInput={setMakler} />
             <SliderInput
               label='Zinsen (pro Jahr)'
-              tooltip='Bitte hier den Zinssatz (pro Jahr) eingeben'
+              tooltip='Bitte hier den Zinssatz (pro Jahr) für das Darlehen eingeben. Der Zinssatz hat Einfluss auf die Annuität.'
               typeHint='%'
               defaultValue={zinsenJahr}
               handleInput={setZinsenJahr} />
             <SliderInput
               label='Tilgung (pro Jahr)'
-              tooltip='Bitte hier die anfängliche Tilgung (pro Jahr) eingeben'
+              tooltip='Bitte hier die anfängliche Tilgung (pro Jahr) eingeben. Aus der Tilgungsrate geht die gesamte Laufzeit hervor. Tilgung sollte nicht 0 sein.'
               typeHint='%'
               defaultValue={tilgung}
               handleInput={setTilgung} />
@@ -268,17 +268,17 @@ function App() {
 
               <DataOutput
                 label='Mietpreis durchschnitt Laufzeit (inkl. Inflation)'
-                tooltip='Hier errechnet sich die durchschnittliche Miete (incl. Inflation) für die Laufzeit'
+                tooltip='Hier errechnet sich die durchschnittliche Miete (inkl. Inflation) für die Laufzeit'
                 typeHint='€'
                 value={mietpreis} />
               <DataOutput
                 label='Sparrate (durchschnittlich)'
-                tooltip='Hier errechnet sich die Sparratte. Gesamte monatliche Belastung bei kauf minus Kaltmiete.'
+                tooltip='Hier errechnet sich die Sparratte. Gesamte monatliche Belastung bei Kauf minus Kaltmiete, oder manuell festgelegt.'
                 typeHint='€'
                 value={sparrate} />
               <DataOutput
                 label='Vermögen Endwert'
-                tooltip='Hier errechnet sich der Endwert des Vermögens nach der Laufzeit'
+                tooltip='Hier errechnet sich der Endwert des Vermögens nach der (hypothetischen) Laufzeit des Darlehens. Es wird davon ausgegangen, dass das Eigenkapital und die monatliche Sparrate angelegt werden.'
                 typeHint='€'
                 value={vermoegen} />
               <DataOutput
@@ -304,7 +304,7 @@ function App() {
                 value={darlehen} />
               <DataOutput
                 label='Zinsen (pro Monat)'
-                tooltip='Hier errechnet sich der Zinssatz pro Monat'
+                tooltip='Hier errechnet sich der Zinssatz pro Monat in Euro'
                 typeHint='€'
                 value={zinsenMonat} />
               <DataOutput
@@ -322,22 +322,22 @@ function App() {
                 value={abzahlenJahr} />
               <DataOutput
                 label='Instandhaltung (durchschnittlich inkl. Inflation)'
-                tooltip='Hier errechnet sich durchschnittlichen Instanthaltungskosten inkl. Inflation'
+                tooltip='Hier errechnet sich durchschnittlichen Instanthaltungskosten (inkl. Inflation)'
                 typeHint='€'
                 value={instantEuro} />
               <DataOutput
                 label='Monatliche Belastung mit Instandhaltung'
-                tooltip='Hier errechnet sich die ges. monatliche Belastung für Finanzierung und Instandhaltung'
+                tooltip='Hier errechnet sich die gesamte monatliche Belastung für Finanzierung und Instandhaltung'
                 typeHint='€'
                 value={monatBelastung} />
               <DataOutput
                 label='Gesamtaufwand'
-                tooltip='Hier errechnet sich der Wert, den die Immobilie am Ende der Laufzeit gekostet hat'
+                tooltip='Hier errechnet sich der Summe aller Aufwendungen bei Finanzierung der Immobilie'
                 typeHint='€'
                 value={gesamtBelastung} />
               <DataOutput
                 label='Wert der Immobilie nach Laufzeit Darlehen'
-                tooltip='Hier errechnet sich der Wert der Immobilie am Ende der Laufzeit '
+                tooltip='Hier errechnet sich der Wert der Immobilie am Ende der Laufzeit'
                 typeHint='€'
                 value={wertImmobilie} />
             </Grid>

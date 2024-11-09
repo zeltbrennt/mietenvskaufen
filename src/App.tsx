@@ -48,24 +48,25 @@ function App() {
 
   useEffect(() => {
     const _totalAmnt = kaufpreis + modernKost
-    const _darlehen = _totalAmnt + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital
+    const _darlehen = Math.max(_totalAmnt + (kaufpreis / 100) * gest + (kaufpreis / 100) * notar + (kaufpreis / 100) * makler - eigenkapital, 0)
     const _zinsenMonat = zinsenJahr / 100 / 12 * _darlehen
     const _annuitaet = tilgung / 100 / 12 * _darlehen + _zinsenMonat
     let _rate = (zinsenJahr / 100 / 12)
     const _den = -_darlehen * _rate + _annuitaet
-    const _abzahlenMonat = _rate === 0 ? _darlehen / _annuitaet : Math.log(_annuitaet / _den) / Math.log(1 + _rate);
+    const _abzahlenMonat = _darlehen === 0 ? 0 : _rate === 0 ? _darlehen / _annuitaet : Math.log(_annuitaet / _den) / Math.log(1 + _rate);
+    console.log(_darlehen)
     const _abzahlenJahr = _abzahlenMonat / 12;
     const _mietpreis = _abzahlenJahr === Infinity ? mietteuerung > 0 ? Infinity : kaltmiete : ((kaltmiete * (1 + mietteuerung / 100) ** _abzahlenJahr) + kaltmiete) / 2;
     _rate = instand / 100 / 12
     const _instandEuro = _abzahlenJahr !== Infinity ? (((_totalAmnt * _rate) * (1 + inflation / 100) ** _abzahlenJahr) + _totalAmnt * _rate) / 2 : Infinity
     const _monatBelastung = _abzahlenJahr !== Infinity ? annuitaet + instantEuro : Infinity
-    const _sparrate = sparManuell ? sparrate : _abzahlenJahr === Infinity ? Infinity : _monatBelastung - _mietpreis;
+    const _sparrate = sparManuell ? sparrate : _abzahlenJahr === Infinity ? Infinity : _abzahlenJahr === 0 ? 0 : _monatBelastung - _mietpreis;
     const _pmt = -_sparrate * 12
     _rate = rendite / 100
     const _pow = (1 + _rate) ** _abzahlenJahr
     const _vermoegen = (_rate === 0) ? eigenkapital : (_pmt * (1 - _pow) / _rate) + eigenkapital * _pow;
     const _vermoegenNetto = (_rate === 0) ? eigenkapital : (_abzahlenJahr === Infinity) ? Infinity : _vermoegen - ((_vermoegen - (_sparrate * 12 * _abzahlenJahr)) * kapitalertragssteuer / 100);
-    const _gesamtBelastung = _monatBelastung * 12 * _abzahlenJahr + eigenkapital;
+    const _gesamtBelastung = _monatBelastung * 12 * _abzahlenJahr + eigenkapital > (_totalAmnt) ? _totalAmnt : eigenkapital;
     const _wertImmobilie = _abzahlenJahr !== Infinity ? _totalAmnt * (1 + wersteigerung / 100) ** _abzahlenJahr : Infinity
     setDarlehen(_darlehen)
     setZinsenMonat(_zinsenMonat)

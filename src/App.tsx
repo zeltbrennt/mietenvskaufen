@@ -54,7 +54,6 @@ function App() {
     let _rate = (zinsenJahr / 100 / 12)
     const _den = -_darlehen * _rate + _annuitaet
     const _abzahlenMonat = _darlehen === 0 ? 0 : _rate === 0 ? _darlehen / _annuitaet : Math.log(_annuitaet / _den) / Math.log(1 + _rate);
-    console.log(_darlehen)
     const _abzahlenJahr = _abzahlenMonat / 12;
     const _mietpreis = _abzahlenJahr === Infinity ? mietteuerung > 0 ? Infinity : kaltmiete : ((kaltmiete * (1 + mietteuerung / 100) ** _abzahlenJahr) + kaltmiete) / 2;
     _rate = instand / 100 / 12
@@ -85,8 +84,6 @@ function App() {
 
   }, [inflation, mietteuerung, wersteigerung, rendite, kapitalertragssteuer, mietpreis, eigenkapital, kaufpreis, modernKost,
     gest, notar, makler, zinsenJahr, tilgung, instand, sparManuell, sparrate])
-
-
 
 
   interface tilgungsplanRow {
